@@ -10,10 +10,13 @@ import {
    StatusBar,
    Dimensions,
 } from "react-native";
+import { useRouter } from "expo-router";
+
 
 const windowHeight = Dimensions.get("window").height;
 
 const SignInScreen = () => {
+   const router = useRouter()
    return (
       <SafeAreaView style={styles.container}>
          <StatusBar barStyle="dark-content" />
@@ -21,7 +24,7 @@ const SignInScreen = () => {
          {/* Illustration Section */}
          <View style={styles.illustrationContainer}>
             <Image
-               source={require("../../assets/images/splash-icon.png")} // Replace with your actual image path
+               source={require("../../assets/images/login.png")} // Replace with your actual image path
                style={styles.illustration}
                resizeMode="contain"
             />
@@ -40,7 +43,7 @@ const SignInScreen = () => {
                   Enjoy Single Sign-On Convenience By{"\n"}Clicking The Button
                </Text>
 
-               <TouchableOpacity style={styles.loginButton} onPress={() => {}}>
+               <TouchableOpacity style={styles.loginButton} onPress={() => { router.push({ pathname: "/(tabs)/home"}) }}>
                   <Text style={styles.loginButtonText}>LOGIN NOW</Text>
                </TouchableOpacity>
             </View>

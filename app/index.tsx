@@ -22,7 +22,7 @@ const index = () => {
     onSkip={handleDone}
     pages={[
        {
-          backgroundColor: "#9FE870",
+          backgroundColor: "#6B4EFF",
           image: (
              <Image
                 source={OnboardOneImage}
@@ -35,7 +35,7 @@ const index = () => {
           subTitleStyles: styles.subtitle,
        },
        {
-          backgroundColor: "#9FE870",
+          backgroundColor: "#6B4EFF",
           image: (
              <Image
                 source={OnboardTwoImage}
@@ -48,7 +48,7 @@ const index = () => {
           subTitleStyles: styles.subtitle,
        },
        {
-          backgroundColor: "#9FE870",
+          backgroundColor: "#6B4EFF",
           image: (
              <Image
                 source={OnboardThreeImage}
