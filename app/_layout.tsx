@@ -43,6 +43,11 @@ export default function RootLayout() {
                options={{ headerShown: false }}
             />
             <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+            <Stack.Screen name="parkingDetail" />
+            <Stack.Screen name="vehicleSelection" />
+            <Stack.Screen name="ParkingBooking" />
+            <Stack.Screen name="ParkingSlot" />
+            <Stack.Screen name="ETicket" />
 
         <Stack.Screen name="+not-found" />
       </Stack>
