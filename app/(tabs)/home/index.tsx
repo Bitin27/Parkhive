@@ -23,7 +23,7 @@ export default function Home() {
          price: "5.00",
          time: "5",
          spots: "28",
-         image: require("../../../assets/images/login.png"),
+         image: require("../../../assets/images/location.png"),
       },
       {
          id: 2,
@@ -32,7 +32,7 @@ export default function Home() {
          price: "5.00",
          time: "10",
          spots: "15",
-         image: require("../../../assets/images/login.png"),
+         image: require("../../../assets/images/location.png"),
       },
    ];
 

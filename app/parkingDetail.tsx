@@ -559,7 +559,7 @@ const ParkingDetailsScreen = () => {
       ],
       description:
          "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua",
-      operatorName: "John Doe",
+      operatorName: "Ram Maharjan",
       operatorImage: "https://placeholder.com/operator",
    };
    const router = useRouter();
