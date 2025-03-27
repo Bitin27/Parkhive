@@ -140,12 +140,39 @@ import { View, Text, StyleSheet, TouchableOpacity, Image } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 
-export function ParkingCard({ name, rating, price, time, spots, image }: any) {
+export function ParkingCard({
+   id,
+   address,
+   description,
+   longitude,
+   latitude,
+   name,
+   rating,
+   price,
+   time,
+   spots,
+   image,
+}: any) {
    const router = useRouter();
+   console.log("This is what", id);
 
    // Handle navigation with a callback function
    const handlePress = () => {
-      router.push("/parkingDetail");
+      router.push({
+         pathname: "/parkingDetail",
+         params: {
+            id,
+            name,
+            rating,
+            price,
+            time,
+            spots,
+            address: address || "1012 Ocean avenue, New york, USA", // Default if not available
+            description: description || "No description available",
+            latitude,
+            longitude,
+         },
+      });
    };
 
    // Handle favorite with a callback function

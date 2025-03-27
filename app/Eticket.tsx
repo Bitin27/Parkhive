@@ -29,14 +29,14 @@ const ETicket: React.FC<ETicketProps> = (
    }
 ) => {
    const ticketData = {
-      name: "Esther Howard",
+      name: "Bitin Nakarmi",
       vehicleNumber: "GR 456-EFGH",
-      parkingName: "SecurePark H...",
-      parkingSlot: "A06 (1st Floor)",
+      parkingName: "Dharahara Parking",
+      parkingSlot: "A1",
       arriveTime: "07:00 AM",
       exitTime: "08:00 AM",
-      date: "04 Oct",
-      totalPayment: "$7.00",
+      date: "2nd March 2025",
+      totalPayment: "Rs.25",
    };
 
    const handleNavigate = () => {

@@ -1,409 +1,289 @@
-// import React, { useState } from "react";
+
+
+// import React from "react";
 // import {
 //    View,
 //    Text,
-//    StyleSheet,
 //    Image,
+//    StyleSheet,
 //    TouchableOpacity,
 //    ScrollView,
 //    SafeAreaView,
 //    StatusBar,
-//    FlatList,
-//    Linking,
 // } from "react-native";
-// import { MaterialIcons, Ionicons } from "@expo/vector-icons";
+// import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
+// import Swiper from "react-native-swiper";
+// import { useRouter } from "expo-router";
 
-// // Sample image data for the gallery
-// const galleryImages = [
-//    require("../assets/images/onboardone.png"),
-//    require("../assets/images/onboardone.png"),
-//    require("../assets/images/onboardone.png"),
-//    require("../assets/images/onboardone.png"),
-//    require("../assets/images/onboardone.png"),
-//    // ... more images
-// ];
-
-// export default function ParkingDetailScreen({ route, navigation }: any) {
-//    // In Expo, you would get the parking data from route.params
-//    const parkingData = route.params?.parkingData || {
-//       id: "1",
-//       name: "GreenPark Innovations",
-//       rating: 4.8,
-//       reviewCount: 365,
+// const ParkingDetailsScreen = () => {
+//    const parkingData = {
+//       name: "Dharahara Underground Parking",
+//       address: "P826+3VR, Sundhara Rd",
+//       rating: 5,
+//       reviews: 700,
+//       timeAway: 5,
+//       availableSpots: 284,
 //       price: 5.0,
-//       address: "1012 Ocean avenue, New york, USA",
-//       timeAway: "05",
-//       spots: 28,
+      
+//       images: [
+//          "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.setopati.com%2Fuploads%2Fposts%2Fdharahara-parking-(10)-1706419003.jpeg&f=1&nofb=1&ipt=5b572026cb3c0e511d06e112279b24714940d6ba0bda504a84b52eaa8283df35&ipo=images",
+//          "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse2.mm.bing.net%2Fth%3Fid%3DOIP.YrwIvg8FjgSWGmEsqwNrQgHaE8%26pid%3DApi&f=1&ipt=11743a55c715feebcec0cc4921095956a8eb1fc20fb3726f9ff5d708d3ad2e7d&ipo=images",
+//          "https://placeholder.com/parking3",
+         
+//       ],
 //       description:
-//          "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua",
-//       operatedBy: "John Doe",
-//       operatorAvatar: require("../assets/images/onboardtwo.png"),
+//          "The Dharahara Underground Parking is a modern parking facility located beneath the newly reconstructed Dharahara Tower in Kathmandu. It provides a spacious and secure parking area for both two-wheelers and four-wheelers, helping to ease traffic congestion in the city.",
+//       operatorName: "Ram Maharjan",
+//       operatorImage: "https://placeholder.com/operator",
 //    };
-
-//    const [activeTab, setActiveTab] = useState("About");
-//    const [isFavorite, setIsFavorite] = useState(false);
-
-//    // Handle tab selection
-//    const handleTabPress = (tabName: any) => {
-//       setActiveTab(tabName);
+//    const router = useRouter();
+//    const bookSlot = () => {
+//       router.push("/VehicleSelection");
 //    };
-
-//    // Handle booking
-//    const handleBookSlot = () => {
-//       // Implement booking logic
-//       console.log("Booking slot...");
-//    };
-
-//    // Handle call
-//    const handleCall = () => {
-//       Linking.openURL(`tel:${"1234567890"}`);
-//    };
-
-//    // Handle message
-//    const handleMessage = () => {
-//       // Implement messaging logic
-//       console.log("Opening messages...");
-//    };
-
 //    return (
 //       <SafeAreaView style={styles.container}>
 //          <StatusBar barStyle="dark-content" />
 
-//          {/* Main image and header buttons */}
-//          <View style={styles.imageContainer}>
-//             <Image
-//                source={galleryImages[0]}
-//                style={styles.mainImage}
-//                resizeMode="cover"
-//             />
-
-//             {/* Back button */}
-//             <TouchableOpacity
-//                style={styles.backButton}
-//                onPress={() => navigation.goBack()}
-//             >
-//                <MaterialIcons name="arrow-back" size={24} color="#000" />
-//             </TouchableOpacity>
-
-//             {/* Share and favorite buttons */}
-//             <View style={styles.headerButtons}>
+//          {/* Header */}
+//          <View style={styles.header}>
+//             {/* <TouchableOpacity style={styles.iconButton}>
+//                <Ionicons name="arrow-back" size={24} color="black" />
+//             </TouchableOpacity> */}
+//             <View style={styles.headerRight}>
 //                <TouchableOpacity style={styles.iconButton}>
-//                   <Ionicons name="share-outline" size={24} color="#000" />
+//                   <Ionicons name="share-outline" size={24} color="black" />
 //                </TouchableOpacity>
-//                <TouchableOpacity
-//                   style={styles.iconButton}
-//                   onPress={() => setIsFavorite(!isFavorite)}
-//                >
-//                   <Ionicons
-//                      name={isFavorite ? "heart" : "heart-outline"}
-//                      size={24}
-//                      color={isFavorite ? "#FF3B30" : "#000"}
-//                   />
+//                <TouchableOpacity style={styles.iconButton}>
+//                   <Ionicons name="heart-outline" size={24} color="black" />
 //                </TouchableOpacity>
-//             </View>
-
-//             {/* Gallery thumbnails */}
-//             <View style={styles.thumbnailContainer}>
-//                <FlatList
-//                   data={galleryImages.slice(0, 5)}
-//                   horizontal
-//                   showsHorizontalScrollIndicator={false}
-//                   renderItem={({ item, index }) => (
-//                      <TouchableOpacity style={styles.thumbnail}>
-//                         <Image source={item} style={styles.thumbnailImage} />
-//                      </TouchableOpacity>
-//                   )}
-//                   keyExtractor={(_, index) => index.toString()}
-//                   ListFooterComponent={
-//                      galleryImages.length > 5 ? (
-//                         <TouchableOpacity style={styles.moreImages}>
-//                            <Text style={styles.moreImagesText}>
-//                               +{galleryImages.length - 5}
-//                            </Text>
-//                         </TouchableOpacity>
-//                      ) : null
-//                   }
-//                />
 //             </View>
 //          </View>
 
-//          <ScrollView style={styles.contentContainer}>
-//             {/* Badge and rating */}
-//             <View style={styles.badgeContainer}>
-//                <Text style={styles.badge}>Car Parking</Text>
-//                <View style={styles.ratingContainer}>
-//                   <Ionicons name="star" size={16} color="#FFD700" />
-//                   <Text style={styles.ratingText}>
-//                      {parkingData.rating} ({parkingData.reviewCount} reviews)
-//                   </Text>
-//                </View>
+//          {/* Main Content */}
+//          <ScrollView style={styles.scrollView} bounces={false}>
+//             {/* Image Slider */}
+//             <View style={styles.swiperContainer}>
+//                <Swiper
+//                   dotStyle={styles.dot}
+//                   activeDotStyle={styles.activeDot}
+//                   showsButtons={false}
+//                   autoplay={false}
+//                   loop={false}
+//                >
+//                   {parkingData.images.map((image, index) => (
+//                      <Image
+//                         key={index}
+//                         source={{ uri: image }}
+//                         style={styles.image}
+//                         resizeMode="cover"
+//                      />
+//                   ))}
+//                </Swiper>
 //             </View>
 
-//             {/* Name and location */}
-//             <Text style={styles.name}>{parkingData.name}</Text>
-//             <Text style={styles.address}>{parkingData.address}</Text>
+//             <View style={styles.content}>
+//                {/* Title Section */}
+//                <View style={styles.typeContainer}>
+//                   <Text style={styles.type}>Car Parking</Text>
+//                   <View style={styles.ratingContainer}>
+//                      <Ionicons name="star" size={16} color="#FFD700" />
+//                      <Text style={styles.rating}>
+//                         {parkingData.rating} ({parkingData.reviews} reviews)
+//                      </Text>
+//                   </View>
+//                </View>
 
-//             {/* Message button */}
-//             <TouchableOpacity
-//                style={styles.messageButton}
-//                onPress={handleMessage}
-//             >
-//                <Ionicons name="chatbubble-ellipses" size={24} color="#FFFFFF" />
-//             </TouchableOpacity>
+//                <Text style={styles.name}>{parkingData.name}</Text>
+//                <Text style={styles.address}>{parkingData.address}</Text>
 
-//             {/* Tab navigation */}
-//             <View style={styles.tabContainer}>
-//                {["About", "Gallery", "Review"].map((tab) => (
-//                   <TouchableOpacity
-//                      key={tab}
-//                      style={[styles.tab, activeTab === tab && styles.activeTab]}
-//                      onPress={() => handleTabPress(tab)}
-//                   >
-//                      <Text
-//                         style={[
-//                            styles.tabText,
-//                            activeTab === tab && styles.activeTabText,
-//                         ]}
-//                      >
-//                         {tab}
+//                {/* Navigation Tabs */}
+//                <View style={styles.tabs}>
+//                   <TouchableOpacity style={[styles.tab, styles.activeTab]}>
+//                      <Text style={[styles.tabText, styles.activeTabText]}>
+//                         About
 //                      </Text>
 //                   </TouchableOpacity>
-//                ))}
-//             </View>
+//                   <TouchableOpacity style={styles.tab}>
+//                      <Text style={styles.tabText}>Gallery</Text>
+//                   </TouchableOpacity>
+//                   <TouchableOpacity style={styles.tab}>
+//                      <Text style={styles.tabText}>Review</Text>
+//                   </TouchableOpacity>
+//                </View>
 
-//             {/* Content based on active tab */}
-//             {activeTab === "About" && (
-//                <View style={styles.aboutContainer}>
-//                   {/* Time and spots */}
-//                   <View style={styles.infoRow}>
-//                      <View style={styles.infoItem}>
-//                         <MaterialIcons
-//                            name="access-time"
-//                            size={20}
-//                            color="#6B4EFF"
-//                         />
-//                         <Text style={styles.infoText}>
-//                            {parkingData.timeAway} Mins Away
-//                         </Text>
-//                      </View>
-//                      <View style={styles.infoItem}>
-//                         <MaterialIcons
-//                            name="local-parking"
-//                            size={20}
-//                            color="#6B4EFF"
-//                         />
-//                         <Text style={styles.infoText}>
-//                            {parkingData.spots} Spots Available
-//                         </Text>
-//                      </View>
-//                   </View>
-
-//                   {/* Description */}
-//                   <View style={styles.descriptionContainer}>
-//                      <Text style={styles.sectionTitle}>Description</Text>
-//                      <Text style={styles.descriptionText}>
-//                         {parkingData.description}
-//                         <Text style={styles.readMore}> Read more</Text>
+//                {/* Info Section */}
+//                <View style={styles.infoRow}>
+//                   <View style={styles.infoItem}>
+//                      <Ionicons name="time-outline" size={20} color="#6B46FF" />
+//                      <Text style={styles.infoText}>
+//                         {parkingData.timeAway} Mins Away
 //                      </Text>
 //                   </View>
+//                   <View style={styles.infoItem}>
+//                      <MaterialCommunityIcons
+//                         name="car-parking-lights"
+//                         size={20}
+//                         color="#6B46FF"
+//                      />
+//                      <Text style={styles.infoText}>
+//                         {parkingData.availableSpots} Spots Available
+//                      </Text>
+//                   </View>
+//                </View>
 
-//                   {/* Operated by */}
+//                {/* Description Section */}
+//                <View style={styles.section}>
+//                   <Text style={styles.sectionTitle}>Description</Text>
+//                   <Text style={styles.description}>
+//                      {parkingData.description}
+//                   </Text>
+//                   <TouchableOpacity>
+//                      <Text style={styles.readMore}>Read more</Text>
+//                   </TouchableOpacity>
+//                </View>
+
+//                {/* Operator Section */}
+//                <View style={styles.section}>
+//                   <Text style={styles.sectionTitle}>Operated by</Text>
 //                   <View style={styles.operatorContainer}>
-//                      <Text style={styles.sectionTitle}>Operated by</Text>
-//                      <View style={styles.operatorInfo}>
-//                         <Image
-//                            source={parkingData.operatorAvatar}
-//                            style={styles.operatorAvatar}
-//                         />
-//                         <Text style={styles.operatorName}>
-//                            {parkingData.operatedBy}
-//                         </Text>
-//                         <View style={styles.operatorActions}>
-//                            <TouchableOpacity
-//                               style={styles.operatorButton}
-//                               onPress={handleMessage}
-//                            >
-//                               <Ionicons
-//                                  name="chatbubble-ellipses"
-//                                  size={20}
-//                                  color="#FFFFFF"
-//                               />
-//                            </TouchableOpacity>
-//                            <TouchableOpacity
-//                               style={[styles.operatorButton, styles.callButton]}
-//                               onPress={handleCall}
-//                            >
-//                               <Ionicons name="call" size={20} color="#FFFFFF" />
-//                            </TouchableOpacity>
-//                         </View>
+//                      <Image
+//                         source={{ uri: parkingData.operatorImage }}
+//                         style={styles.operatorImage}
+//                      />
+//                      <Text style={styles.operatorName}>
+//                         {parkingData.operatorName}
+//                      </Text>
+//                      <View style={styles.operatorButtons}>
+//                         <TouchableOpacity style={styles.messageButton}>
+//                            <Ionicons
+//                               name="chatbubble-ellipses"
+//                               size={20}
+//                               color="#6B46FF"
+//                            />
+//                         </TouchableOpacity>
+//                         <TouchableOpacity style={styles.callButton}>
+//                            <Ionicons name="call" size={20} color="#6B46FF" />
+//                         </TouchableOpacity>
 //                      </View>
 //                   </View>
 //                </View>
-//             )}
-
-//             {/* Gallery tab content would go here */}
-//             {/* Review tab content would go here */}
+//             </View>
 //          </ScrollView>
 
-//          {/* Booking bar */}
-//          <View style={styles.bookingBar}>
-//             <View>
-//                <Text style={styles.totalPriceLabel}>Total Price</Text>
-//                <Text style={styles.priceText}>
-//                   ${parkingData.price.toFixed(2)}
-//                   <Text style={styles.priceUnit}>/hr</Text>
+//          {/* Bottom Bar */}
+//          <View style={styles.bottomBar}>
+//             <View style={styles.priceContainer}>
+//                <Text style={styles.priceLabel}>Total Price</Text>
+//                <Text style={styles.price}>
+//                   Rs{parkingData.price.toFixed(2)}/hr
 //                </Text>
 //             </View>
-
-//             <TouchableOpacity
-//                style={styles.bookButton}
-//                onPress={handleBookSlot}
-//             >
+//             <TouchableOpacity style={styles.bookButton} onPress={bookSlot}>
 //                <Text style={styles.bookButtonText}>Book Slot</Text>
 //             </TouchableOpacity>
 //          </View>
 //       </SafeAreaView>
 //    );
-// }
+// };
 
 // const styles = StyleSheet.create({
 //    container: {
 //       flex: 1,
-//       backgroundColor: "#FFFFFF",
+//       backgroundColor: "#fff",
 //    },
-//    imageContainer: {
-//       position: "relative",
-//       height: 240,
+//    scrollView: {
+//       flex: 1,
 //    },
-//    mainImage: {
-//       width: "100%",
-//       height: "100%",
-//    },
-//    backButton: {
+//    header: {
+//       flexDirection: "row",
+//       justifyContent: "space-between",
+//       padding: 16,
 //       position: "absolute",
-//       top: 16,
-//       left: 16,
-//       width: 40,
-//       height: 40,
-//       borderRadius: 20,
-//       backgroundColor: "rgba(255, 255, 255, 0.9)",
-//       justifyContent: "center",
-//       alignItems: "center",
-//       shadowColor: "#000",
-//       shadowOffset: { width: 0, height: 2 },
-//       shadowOpacity: 0.1,
-//       shadowRadius: 4,
-//       elevation: 3,
+//       top: 0,
+//       left: 0,
+//       right: 0,
+//       zIndex: 1,
 //    },
-//    headerButtons: {
-//       position: "absolute",
-//       top: 16,
-//       right: 16,
+//    headerRight: {
 //       flexDirection: "row",
 //    },
 //    iconButton: {
 //       width: 40,
 //       height: 40,
+//       backgroundColor: "#fff",
 //       borderRadius: 20,
-//       backgroundColor: "rgba(255, 255, 255, 0.9)",
 //       justifyContent: "center",
 //       alignItems: "center",
 //       marginLeft: 8,
 //       shadowColor: "#000",
-//       shadowOffset: { width: 0, height: 2 },
+//       shadowOffset: {
+//          width: 0,
+//          height: 2,
+//       },
 //       shadowOpacity: 0.1,
 //       shadowRadius: 4,
 //       elevation: 3,
 //    },
-//    thumbnailContainer: {
-//       position: "absolute",
-//       bottom: 16,
-//       left: 16,
-//       right: 16,
+//    swiperContainer: {
+//       height: 250,
 //    },
-//    thumbnail: {
-//       width: 60,
-//       height: 60,
-//       borderRadius: 8,
-//       marginRight: 8,
-//       overflow: "hidden",
-//       borderWidth: 2,
-//       borderColor: "#FFFFFF",
-//    },
-//    thumbnailImage: {
+//    image: {
 //       width: "100%",
 //       height: "100%",
 //    },
-//    moreImages: {
-//       width: 60,
-//       height: 60,
-//       borderRadius: 8,
-//       backgroundColor: "rgba(0, 0, 0, 0.4)",
-//       justifyContent: "center",
-//       alignItems: "center",
-//       borderWidth: 2,
-//       borderColor: "#FFFFFF",
+//    dot: {
+//       backgroundColor: "rgba(255,255,255,.3)",
+//       width: 8,
+//       height: 8,
+//       borderRadius: 4,
+//       marginLeft: 3,
+//       marginRight: 3,
 //    },
-//    moreImagesText: {
-//       color: "#FFFFFF",
-//       fontWeight: "bold",
+//    activeDot: {
+//       backgroundColor: "#fff",
+//       width: 8,
+//       height: 8,
+//       borderRadius: 4,
+//       marginLeft: 3,
+//       marginRight: 3,
 //    },
-//    contentContainer: {
+//    content: {
 //       flex: 1,
 //       padding: 16,
 //    },
-//    badgeContainer: {
+//    typeContainer: {
 //       flexDirection: "row",
-//       alignItems: "center",
 //       justifyContent: "space-between",
+//       alignItems: "center",
 //       marginBottom: 8,
 //    },
-//    badge: {
-//       color: "#6B4EFF",
-//       fontSize: 14,
-//       fontWeight: "500",
+//    type: {
+//       color: "#6B46FF",
+//       fontSize: 16,
+//       fontWeight: "600",
 //    },
 //    ratingContainer: {
 //       flexDirection: "row",
 //       alignItems: "center",
 //    },
-//    ratingText: {
-//       color: "#666",
-//       fontSize: 14,
+//    rating: {
 //       marginLeft: 4,
+//       color: "#666",
 //    },
 //    name: {
 //       fontSize: 24,
 //       fontWeight: "bold",
-//       color: "#000",
 //       marginBottom: 4,
 //    },
 //    address: {
-//       fontSize: 14,
 //       color: "#666",
 //       marginBottom: 16,
 //    },
-//    messageButton: {
-//       position: "absolute",
-//       top: 72,
-//       right: 16,
-//       width: 40,
-//       height: 40,
-//       borderRadius: 20,
-//       backgroundColor: "#6B4EFF",
-//       justifyContent: "center",
-//       alignItems: "center",
-//       shadowColor: "#6B4EFF",
-//       shadowOffset: { width: 0, height: 4 },
-//       shadowOpacity: 0.3,
-//       shadowRadius: 8,
-//       elevation: 5,
-//    },
-//    tabContainer: {
+//    tabs: {
 //       flexDirection: "row",
-//       borderBottomWidth: 1,
-//       borderBottomColor: "#E5E5E5",
 //       marginBottom: 16,
+//       borderBottomWidth: 1,
+//       borderBottomColor: "#eee",
 //    },
 //    tab: {
 //       paddingVertical: 12,
@@ -411,121 +291,112 @@
 //    },
 //    activeTab: {
 //       borderBottomWidth: 2,
-//       borderBottomColor: "#6B4EFF",
+//       borderBottomColor: "#6B46FF",
 //    },
 //    tabText: {
-//       fontSize: 16,
 //       color: "#666",
 //    },
 //    activeTabText: {
-//       color: "#6B4EFF",
-//       fontWeight: "500",
-//    },
-//    aboutContainer: {
-//       flex: 1,
+//       color: "#6B46FF",
+//       fontWeight: "600",
 //    },
 //    infoRow: {
 //       flexDirection: "row",
-//       justifyContent: "space-between",
 //       marginBottom: 24,
 //    },
 //    infoItem: {
 //       flexDirection: "row",
 //       alignItems: "center",
+//       marginRight: 24,
 //    },
 //    infoText: {
-//       fontSize: 14,
-//       color: "#666",
 //       marginLeft: 8,
+//       color: "#666",
 //    },
-//    descriptionContainer: {
+//    section: {
 //       marginBottom: 24,
 //    },
 //    sectionTitle: {
-//       fontSize: 16,
+//       fontSize: 18,
 //       fontWeight: "600",
-//       color: "#000",
 //       marginBottom: 8,
 //    },
-//    descriptionText: {
-//       fontSize: 14,
+//    description: {
 //       color: "#666",
 //       lineHeight: 20,
 //    },
 //    readMore: {
-//       color: "#6B4EFF",
-//       fontWeight: "500",
+//       color: "#6B46FF",
+//       marginTop: 8,
 //    },
 //    operatorContainer: {
-//       marginBottom: 24,
-//    },
-//    operatorInfo: {
 //       flexDirection: "row",
 //       alignItems: "center",
 //    },
-//    operatorAvatar: {
+//    operatorImage: {
 //       width: 40,
 //       height: 40,
 //       borderRadius: 20,
+//       marginRight: 12,
 //    },
 //    operatorName: {
-//       fontSize: 14,
-//       fontWeight: "500",
-//       color: "#000",
-//       marginLeft: 12,
 //       flex: 1,
+//       fontSize: 16,
+//       fontWeight: "500",
 //    },
-//    operatorActions: {
+//    operatorButtons: {
 //       flexDirection: "row",
 //    },
-//    operatorButton: {
-//       width: 36,
-//       height: 36,
-//       borderRadius: 18,
-//       backgroundColor: "#6B4EFF",
+//    messageButton: {
+//       width: 40,
+//       height: 40,
+//       backgroundColor: "#F0EEFF",
+//       borderRadius: 20,
 //       justifyContent: "center",
 //       alignItems: "center",
-//       marginLeft: 8,
+//       marginRight: 8,
 //    },
 //    callButton: {
-//       backgroundColor: "#4CAF50",
-//    },
-//    bookingBar: {
-//       flexDirection: "row",
+//       width: 40,
+//       height: 40,
+//       backgroundColor: "#F0EEFF",
+//       borderRadius: 20,
+//       justifyContent: "center",
 //       alignItems: "center",
-//       justifyContent: "space-between",
-//       paddingHorizontal: 16,
-//       paddingVertical: 12,
-//       borderTopWidth: 1,
-//       borderTopColor: "#E5E5E5",
-//       backgroundColor: "#FFFFFF",
 //    },
-//    totalPriceLabel: {
-//       fontSize: 12,
+//    bottomBar: {
+//       flexDirection: "row",
+//       padding: 16,
+//       borderTopWidth: 1,
+//       borderTopColor: "#eee",
+//       alignItems: "center",
+//       backgroundColor: "#fff",
+//    },
+//    priceContainer: {
+//       flex: 1,
+//    },
+//    priceLabel: {
 //       color: "#666",
 //    },
-//    priceText: {
+//    price: {
 //       fontSize: 20,
 //       fontWeight: "bold",
-//       color: "#6B4EFF",
-//    },
-//    priceUnit: {
-//       fontSize: 14,
-//       color: "#666",
-//       fontWeight: "normal",
 //    },
 //    bookButton: {
-//       backgroundColor: "#6B4EFF",
+//       backgroundColor: "#6B46FF",
 //       paddingVertical: 12,
 //       paddingHorizontal: 32,
 //       borderRadius: 24,
 //    },
 //    bookButtonText: {
-//       color: "#FFFFFF",
+//       color: "#fff",
 //       fontSize: 16,
 //       fontWeight: "600",
 //    },
 // });
+
+// export default ParkingDetailsScreen;
+
 
 import React from "react";
 import {
@@ -540,41 +411,61 @@ import {
 } from "react-native";
 import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import Swiper from "react-native-swiper";
-import { useRouter } from "expo-router";
+import { useRouter, useLocalSearchParams } from "expo-router";
 
 const ParkingDetailsScreen = () => {
-   // Mock data
-   const parkingData = {
-      name: "GreenPark Innovations",
-      address: "1012 Ocean avenue, New york, USA",
-      rating: 4.8,
-      reviews: 365,
-      timeAway: 5,
-      availableSpots: 28,
-      price: 5.0,
-      images: [
-         "https://placeholder.com/parking1",
-         "https://placeholder.com/parking2",
-         "https://placeholder.com/parking3",
-      ],
-      description:
-         "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua",
-      operatorName: "Ram Maharjan",
-      operatorImage: "https://placeholder.com/operator",
-   };
    const router = useRouter();
-   const bookSlot = () => {
-      router.push("/VehicleSelection");
+   // Get data from route params
+   const params : any = useLocalSearchParams();
+
+   // Extract parking data from params
+   const parkingData = {
+      id: params.id,
+      name: params.name || "Unnamed Parking",
+      address: params.address || "Address not available",
+      rating: parseFloat(params.rating) || 4.0,
+      reviews: parseInt(params.reviews) || 0,
+      timeAway: parseInt(params.time) || 5,
+      availableSpots: parseInt(params.spots) || 0,
+      price: parseFloat(params.price) || 5.0,
+      description: params.description || "No description available",
+      // Use placeholder images or default images
+      images: [
+         require("../assets/images/location.png"),
+         require("../assets/images/location.png"),
+         require("../assets/images/location.png"),
+      ],
+      operatorName: "Parking Operator",
+      operatorImage: require("../assets/images/location.png"), // Use a default image
    };
+
+   const bookSlot = () => {
+      router.push({
+         pathname: "/VehicleSelection",
+         params: {
+            parkingId: parkingData.id,
+            parkingName: parkingData.name,
+            price: parkingData.price,
+         },
+      });
+   };
+
+   const handleBackPress = () => {
+      router.back();
+   };
+
    return (
       <SafeAreaView style={styles.container}>
          <StatusBar barStyle="dark-content" />
 
          {/* Header */}
          <View style={styles.header}>
-            {/* <TouchableOpacity style={styles.iconButton}>
+            <TouchableOpacity
+               style={styles.iconButton}
+               onPress={handleBackPress}
+            >
                <Ionicons name="arrow-back" size={24} color="black" />
-            </TouchableOpacity> */}
+            </TouchableOpacity>
             <View style={styles.headerRight}>
                <TouchableOpacity style={styles.iconButton}>
                   <Ionicons name="share-outline" size={24} color="black" />
@@ -599,7 +490,7 @@ const ParkingDetailsScreen = () => {
                   {parkingData.images.map((image, index) => (
                      <Image
                         key={index}
-                        source={{ uri: image }}
+                        source={image}
                         style={styles.image}
                         resizeMode="cover"
                      />
@@ -673,7 +564,7 @@ const ParkingDetailsScreen = () => {
                   <Text style={styles.sectionTitle}>Operated by</Text>
                   <View style={styles.operatorContainer}>
                      <Image
-                        source={{ uri: parkingData.operatorImage }}
+                        source={parkingData.operatorImage}
                         style={styles.operatorImage}
                      />
                      <Text style={styles.operatorName}>

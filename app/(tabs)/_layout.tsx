@@ -119,7 +119,7 @@ export default function TabsLayout() {
                   <MaterialIcons name="home" size={24} color={color} />
                ),
             }}
-         />
+        />
          <Tabs.Screen
             name="explore/index"
             options={{

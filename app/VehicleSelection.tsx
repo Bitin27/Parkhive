@@ -1,6 +1,9 @@
+
+
 // import React, { useState } from "react";
 // import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 // import { MaterialCommunityIcons } from "@expo/vector-icons";
+// import { useRouter } from "expo-router";
 
 // type Vehicle = {
 //    id: string;
@@ -10,32 +13,26 @@
 // };
 
 // interface VehicleSelectionProps {
-//    onVehicleSelect: (vehicle: Vehicle) => void;
+//    onVehicleSelect?: (vehicle: Vehicle) => void;
 // }
 
 // const vehicles: Vehicle[] = [
 //    {
 //       id: "1",
-//       name: "Toyota Fortuner",
-//       type: "SUV",
-//       code: "GR 123-ABCD",
+//       name: "Bugatti Chiron",
+//       type: "Car",
+//       code: "BG 123-ABCD",
 //    },
 //    {
 //       id: "2",
-//       name: "Audi",
-//       type: "Sedan",
-//       code: "GR 123-ABCD",
-//    },
-//    {
-//       id: "3",
-//       name: "Honda CBR",
+//       name: "Kawasaki Ninja",
 //       type: "Bike",
-//       code: "GR A12-BCDE",
+//       code: "KN A12-BCDE",
 //    },
 // ];
 
 // const VehicleSelection: React.FC<VehicleSelectionProps> = ({
-//    onVehicleSelect,
+//    onVehicleSelect = () => {},
 // }) => {
 //    const [selectedVehicle, setSelectedVehicle] = useState<string | null>(null);
 
@@ -44,17 +41,12 @@
 //       onVehicleSelect(vehicle);
 //    };
 
-//    const getVehicleIcon = (type: string) => {
-//       switch (type.toLowerCase()) {
-//          case "bike":
-//             return "motorcycle";
-//          case "suv":
-//             return "car-estate";
-//          case "sedan":
-//             return "car";
-//          default:
-//             return "car";
-//       }
+//    const getVehicleIcon = (type: string): string => {
+//       return type.toLowerCase() === "bike" ? "motorbike" : "car";
+//    };
+//    const router = useRouter();
+//    const handleEvent = () => {
+//       router.push("/ParkingBooking");
 //    };
 
 //    return (
@@ -107,13 +99,8 @@
 //             </TouchableOpacity>
 //          ))}
 //          <TouchableOpacity
-//             style={[
-//                styles.continueButton,
-//                selectedVehicle
-//                   ? styles.continueButtonActive
-//                   : styles.continueButtonDisabled,
-//             ]}
-//             disabled={!selectedVehicle}
+//             style={[styles.continueButton]}
+//             onPress={handleEvent}
 //          >
 //             <Text style={styles.continueButtonText}>Continue</Text>
 //          </TouchableOpacity>
@@ -179,15 +166,14 @@
 //       borderRadius: 12,
 //       alignItems: "center",
 //       marginTop: 16,
-//    },
-//    continueButtonActive: {
 //       backgroundColor: "#6C63FF",
 //    },
+
 //    continueButtonDisabled: {
 //       backgroundColor: "#CCCCCC",
 //    },
 //    continueButtonText: {
-//       color: "#FFFFFF",
+//       color: "#000",
 //       fontSize: 16,
 //       fontWeight: "600",
 //    },
@@ -195,10 +181,11 @@
 
 // export default VehicleSelection;
 
+
 import React, { useState } from "react";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { useRouter } from "expo-router";
+import { useLocalSearchParams, useRouter } from "expo-router";
 
 type Vehicle = {
    id: string;
@@ -229,19 +216,38 @@ const vehicles: Vehicle[] = [
 const VehicleSelection: React.FC<VehicleSelectionProps> = ({
    onVehicleSelect = () => {},
 }) => {
-   const [selectedVehicle, setSelectedVehicle] = useState<string | null>(null);
+   const [selectedVehicle, setSelectedVehicle] = useState<Vehicle | null>(null);
+   const router = useRouter();
+   const { parkingId } = useLocalSearchParams<{ parkingId: string }>();
+   console.log("What is this", parkingId);
 
    const handleVehicleSelect = (vehicle: Vehicle) => {
-      setSelectedVehicle(vehicle.id);
+      setSelectedVehicle(vehicle);
       onVehicleSelect(vehicle);
    };
 
    const getVehicleIcon = (type: string): string => {
       return type.toLowerCase() === "bike" ? "motorbike" : "car";
    };
-   const router = useRouter();
-   const handleEvent = () => {
-      router.push("/ParkingBooking");
+
+   const handleContinue = () => {
+      // Only navigate if a vehicle is selected
+      if (selectedVehicle) {
+         // Pass the selected vehicle data as a parameter
+         router.push({
+            pathname: "/ParkingBooking",
+            params: {
+               zoneId: parkingId,
+               vehicleId: selectedVehicle.id,
+               vehicleName: selectedVehicle.name,
+               vehicleType: selectedVehicle.type,
+               vehicleCode: selectedVehicle.code,
+            },
+         });
+      } else {
+         // Optional: Show an alert or message that a vehicle must be selected
+         alert("Please select a vehicle to continue");
+      }
    };
 
    return (
@@ -252,7 +258,7 @@ const VehicleSelection: React.FC<VehicleSelectionProps> = ({
                key={vehicle.id}
                style={[
                   styles.vehicleItem,
-                  selectedVehicle === vehicle.id && styles.selectedVehicle,
+                  selectedVehicle?.id === vehicle.id && styles.selectedVehicle,
                ]}
                onPress={() => handleVehicleSelect(vehicle)}
             >
@@ -261,7 +267,9 @@ const VehicleSelection: React.FC<VehicleSelectionProps> = ({
                      name={getVehicleIcon(vehicle.type)}
                      size={24}
                      color={
-                        selectedVehicle === vehicle.id ? "#FFFFFF" : "#666666"
+                        selectedVehicle?.id === vehicle.id
+                           ? "#FFFFFF"
+                           : "#666666"
                      }
                   />
                </View>
@@ -269,7 +277,8 @@ const VehicleSelection: React.FC<VehicleSelectionProps> = ({
                   <Text
                      style={[
                         styles.vehicleName,
-                        selectedVehicle === vehicle.id && styles.selectedText,
+                        selectedVehicle?.id === vehicle.id &&
+                           styles.selectedText,
                      ]}
                   >
                      {vehicle.name}
@@ -277,13 +286,14 @@ const VehicleSelection: React.FC<VehicleSelectionProps> = ({
                   <Text
                      style={[
                         styles.vehicleDetails,
-                        selectedVehicle === vehicle.id && styles.selectedText,
+                        selectedVehicle?.id === vehicle.id &&
+                           styles.selectedText,
                      ]}
                   >
                      {vehicle.type} • {vehicle.code}
                   </Text>
                </View>
-               {selectedVehicle === vehicle.id && (
+               {selectedVehicle?.id === vehicle.id && (
                   <MaterialCommunityIcons
                      name="check-circle"
                      size={24}
@@ -294,8 +304,12 @@ const VehicleSelection: React.FC<VehicleSelectionProps> = ({
             </TouchableOpacity>
          ))}
          <TouchableOpacity
-            style={[styles.continueButton]}
-            onPress={handleEvent}
+            style={[
+               styles.continueButton,
+               !selectedVehicle && styles.continueButtonDisabled,
+            ]}
+            onPress={handleContinue}
+            disabled={!selectedVehicle}
          >
             <Text style={styles.continueButtonText}>Continue</Text>
          </TouchableOpacity>
@@ -363,12 +377,11 @@ const styles = StyleSheet.create({
       marginTop: 16,
       backgroundColor: "#6C63FF",
    },
-
    continueButtonDisabled: {
       backgroundColor: "#CCCCCC",
    },
    continueButtonText: {
-      color: "#000",
+      color: "#FFFFFF",
       fontSize: 16,
       fontWeight: "600",
    },

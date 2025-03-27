@@ -29,8 +29,8 @@ const index = () => {
                 style={styles.image}
              />
           ),
-          title: "Welcome to Ultimate Gaming Experience",
-          subtitle: "The ultimate platform where your gaming skills can earn you real rewards",
+          title: "Find Your Perfect Spot",
+          subtitle: "Find, reserve, pay, and manage your parking – all within Parkhive.",
           titleStyles: styles.title,
           subTitleStyles: styles.subtitle,
        },
@@ -42,8 +42,8 @@ const index = () => {
                 style={styles.image}
              />
           ),
-          title: "Engage, Compete, and Connect",
-          subtitle: "Connect with fellow gamers, share strategies, and participate in exciting tournaments",
+          title: "Reserve Your Parking ",
+          subtitle: "Guarantee your parking spot in advance. Parkhive allows you to book parking with just a few taps.",
           titleStyles: styles.title,
           subTitleStyles: styles.subtitle,
        },
@@ -55,8 +55,8 @@ const index = () => {
                 style={styles.imageLast}
              />
           ),
-          title: "Let's Earn to Play And Start Earning",
-          subtitle: "Dive into thrilling matches and earn real rewards as you play",
+          title: "Find & Reserve Parking",
+          subtitle: " Guarantee your parking spot in advance. Parkhive allows you to book parking with just a few taps.",
           titleStyles: styles.title,
           subTitleStyles: styles.subtitle,
        },

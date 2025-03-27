@@ -14,7 +14,7 @@ export default function Header() {
          <View style={styles.header}>
             <View style={styles.locationContainer}>
                <MaterialIcons name="location-on" size={24} color="#fff" />
-               <Text style={styles.locationText}>New York, USA</Text>
+               <Text style={styles.locationText}>Thamel,Kathmandu</Text>
                <MaterialIcons
                   name="keyboard-arrow-down"
                   size={24}
