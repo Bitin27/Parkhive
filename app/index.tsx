@@ -13,7 +13,7 @@ const index = () => {
    const handleDone = async () => {
       // Replace with your main app route
       await SecureStore.setItemAsync("onboarding_completed", "true");
-      router.replace("/(auth)");
+      router.replace("/(auth)/");
    };
 
    return (
