@@ -216,8 +216,9 @@ export default function RootLayout() {
           <Stack.Screen name="vehicleSelection" />
           <Stack.Screen name="ParkingBooking" />
           <Stack.Screen name="ParkingSlot" />
-          <Stack.Screen name="ETicket" />
+          <Stack.Screen name="Eticket" />
           <Stack.Screen name="+not-found" />
+          <Stack.Screen name="manager" />
         </Stack>
         <StatusBar style="auto" />
       </ClerkProvider>

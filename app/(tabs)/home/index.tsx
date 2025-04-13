@@ -234,6 +234,7 @@ export default function Home() {
          }));
       },
    });
+   
 
    if (isLoading) {
       return (
@@ -313,6 +314,7 @@ export default function Home() {
 
 const styles = StyleSheet.create({
    container: {
+      marginTop: 50,
       flex: 1,
       backgroundColor: "#fff",
    },

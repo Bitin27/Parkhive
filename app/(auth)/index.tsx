@@ -856,10 +856,9 @@ export default function LoginScreen() {
             </View>
 
             <View style={styles.textContainer}>
-               <Text style={styles.title}>Login and Get Back to Gaming</Text>
+               <Text style={styles.title}>Sign In to Parkhive Securely</Text>
                <Text style={styles.subtitle}>
-                  Log in to resume earning rewards while you play your favorite
-                  games. Keep the rewards coming!
+                 Enjoy single sign-on convenience by clicking the button.
                </Text>
             </View>
 
