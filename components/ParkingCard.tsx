@@ -187,7 +187,7 @@ export function ParkingCard({
          activeOpacity={0.7}
       >
          <View style={styles.imageContainer}>
-            <Image source={image} style={styles.cardImage} resizeMode="cover" />
+            <Image source={{ uri : image}} style={styles.cardImage} resizeMode="cover" />
             <View style={styles.ratingContainer}>
                <MaterialIcons name="star" size={16} color="#FFD700" />
                <Text style={styles.ratingText}>{rating}</Text>
@@ -201,7 +201,6 @@ export function ParkingCard({
             </TouchableOpacity>
          </View>
          <View style={styles.cardContent}>
-            <Text style={styles.cardType}>Car Parking</Text>
             <Text style={styles.cardName}>{name}</Text>
             <View style={styles.cardDetails}>
                <View style={styles.detailItem}>

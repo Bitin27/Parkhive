@@ -218,7 +218,8 @@ export default function RootLayout() {
           <Stack.Screen name="ParkingSlot" />
           <Stack.Screen name="Eticket" />
           <Stack.Screen name="+not-found" />
-          <Stack.Screen name="manager" />
+          <Stack.Screen name="manager/dashboard" options={{ title : "Parking Manager Dashboard"}} />
+          <Stack.Screen name="stripe" />
         </Stack>
         <StatusBar style="auto" />
       </ClerkProvider>

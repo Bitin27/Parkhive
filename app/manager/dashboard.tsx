@@ -134,12 +134,12 @@ const ManagerDashboard = () => {
                Hello, {managerData.firstname} {managerData.lastname}
             </Text>
             <View style={styles.headerButtons}>
-               <TouchableOpacity
+               {/* <TouchableOpacity
                   style={styles.switchButton}
                   onPress={switchToUserApp}
                >
                   <Text style={styles.switchButtonText}>Switch to User</Text>
-               </TouchableOpacity>
+               </TouchableOpacity> */}
                <TouchableOpacity
                   style={styles.signOutButton}
                   onPress={handleSignOut}
@@ -266,9 +266,9 @@ const styles = StyleSheet.create({
       flexDirection: "row",
       justifyContent: "space-between",
       alignItems: "center",
-      padding: 16,
+      padding: 10,
       backgroundColor: "#3498db",
-      paddingTop: 48, // Extra padding for status bar
+      paddingTop: 30, // Extra padding for status bar
    },
    welcomeText: {
       color: "white",

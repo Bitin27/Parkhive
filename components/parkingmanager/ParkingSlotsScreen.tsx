@@ -1,5 +1,4 @@
 
-
 // import React, { useState, useEffect } from "react";
 // import {
 //    View,
@@ -29,9 +28,10 @@
 
 // type ParkingSlotScreenProps = {
 //    userId?: number; // Optional user ID for booking
+//    isManager?: boolean; // Add a prop to determine if user is a manager
 // };
 
-// const ParkingSlotScreen = ({ userId }: ParkingSlotScreenProps) => {
+// const ParkingSlotScreen = ({ userId, isManager = true }: ParkingSlotScreenProps) => {
 //    const [statusFilter, setStatusFilter] = useState<
 //       "all" | "available" | "occupied" | "under review"
 //    >("all");
@@ -104,6 +104,33 @@
 //       },
 //    });
 
+//    // Release a parking slot (change status back to available)
+//    const releaseSlotMutation = useMutation({
+//       mutationFn: async (slotId: number) => {
+//          const { data, error } = await supabaseClient
+//             .from("parking_slots")
+//             .update({
+//                status: "available",
+//                vehicle_type: null, // Clear vehicle info
+//                updated_at: new Date().toISOString(),
+//             })
+//             .eq("id", slotId)
+//             .select();
+
+//          if (error) throw new Error(error.message);
+//          return data;
+//       },
+//       onSuccess: () => {
+//          queryClient.invalidateQueries({ queryKey: ["parkingSlots"] });
+//          setModalVisible(false);
+//          setSelectedSlot(null);
+//          Alert.alert("Success", "Parking slot released successfully");
+//       },
+//       onError: (error: any) => {
+//          Alert.alert("Error", error.message);
+//       },
+//    });
+
 //    const handleBookSlot = () => {
 //       if (!selectedSlot) return;
 
@@ -116,6 +143,25 @@
 //          slotId: selectedSlot.id,
 //          vehicleInfo,
 //       });
+//    };
+   
+//    const handleReleaseSlot = () => {
+//       if (!selectedSlot) return;
+      
+//       Alert.alert(
+//          "Release Confirmation",
+//          "Are you sure you want to mark this slot as available?",
+//          [
+//             {
+//                text: "Cancel",
+//                style: "cancel"
+//             },
+//             {
+//                text: "Release",
+//                onPress: () => releaseSlotMutation.mutate(selectedSlot.id)
+//             }
+//          ]
+//       );
 //    };
 
 //    const openSlotDetails = (slot: ParkingSlot) => {
@@ -394,8 +440,36 @@
 //                            </View>
 //                         )}
 
+//                         {/* Release button for occupied slots (for managers only) */}
+//                         {isManager && selectedSlot.status === "occupied" && (
+//                            <View style={styles.releaseSection}>
+//                               <Text style={styles.sectionTitle}>
+//                                  Management Actions
+//                               </Text>
+//                               <TouchableOpacity
+//                                  style={styles.releaseButton}
+//                                  onPress={handleReleaseSlot}
+//                                  disabled={releaseSlotMutation.isPending}
+//                               >
+//                                  {releaseSlotMutation.isPending ? (
+//                                     <ActivityIndicator
+//                                        size="small"
+//                                        color="white"
+//                                     />
+//                                  ) : (
+//                                     <Text style={styles.releaseButtonText}>
+//                                        Release Slot
+//                                     </Text>
+//                                  )}
+//                               </TouchableOpacity>
+//                               <Text style={styles.releaseNote}>
+//                                  This will mark the parking slot as available and clear vehicle information.
+//                               </Text>
+//                            </View>
+//                         )}
+
 //                         {/* Information for non-available slots */}
-//                         {!isSlotBookable(selectedSlot) && (
+//                         {!isSlotBookable(selectedSlot) && !isManager && (
 //                            <View style={styles.unavailableMessage}>
 //                               <Ionicons
 //                                  name={
@@ -613,6 +687,12 @@
 //       borderTopWidth: 1,
 //       borderTopColor: "#e0e0e0",
 //    },
+//    releaseSection: {
+//       marginTop: 8,
+//       paddingTop: 16,
+//       borderTopWidth: 1,
+//       borderTopColor: "#e0e0e0",
+//    },
 //    sectionTitle: {
 //       fontSize: 16,
 //       fontWeight: "bold",
@@ -672,6 +752,23 @@
 //       color: "white",
 //       fontWeight: "bold",
 //    },
+//    releaseButton: {
+//       backgroundColor: "#3498db",
+//       paddingVertical: 12,
+//       borderRadius: 8,
+//       alignItems: "center",
+//       marginTop: 8,
+//    },
+//    releaseButtonText: {
+//       color: "white",
+//       fontWeight: "bold",
+//    },
+//    releaseNote: {
+//       marginTop: 8,
+//       fontSize: 12,
+//       color: "#666",
+//       fontStyle: "italic",
+//    },
 //    unavailableMessage: {
 //       flexDirection: "row",
 //       alignItems: "center",
@@ -688,6 +785,9 @@
 // });
 
 // export default ParkingSlotScreen;
+
+
+
 import React, { useState, useEffect } from "react";
 import {
    View,
@@ -917,7 +1017,7 @@ const ParkingSlotScreen = ({ userId, isManager = true }: ParkingSlotScreenProps)
 
          {isLoading ? (
             <View style={styles.centerContent}>
-               <ActivityIndicator size="large" color="#3498db" />
+               <ActivityIndicator size="large" color="#5D5FEF" />
                <Text style={styles.loadingText}>Loading parking slots...</Text>
             </View>
          ) : error ? (
@@ -926,7 +1026,7 @@ const ParkingSlotScreen = ({ userId, isManager = true }: ParkingSlotScreenProps)
             </View>
          ) : !parkingSlots || parkingSlots.length === 0 ? (
             <View style={styles.centerContent}>
-               <Ionicons name="car-outline" size={64} color="#ccc" />
+               <Ionicons name="car-outline" size={72} color="#5D5FEF" opacity={0.5} />
                <Text style={styles.emptyText}>No parking slots found</Text>
                {statusFilter !== "all" && (
                   <TouchableOpacity onPress={() => setStatusFilter("all")}>
@@ -942,9 +1042,10 @@ const ParkingSlotScreen = ({ userId, isManager = true }: ParkingSlotScreenProps)
                   <RefreshControl
                      refreshing={isLoading}
                      onRefresh={refetch}
-                     colors={["#3498db"]}
+                     colors={["#5D5FEF"]}
                   />
                }
+               contentContainerStyle={styles.listContainer}
                renderItem={({ item }) => (
                   <TouchableOpacity
                      style={styles.slotCard}
@@ -966,8 +1067,8 @@ const ParkingSlotScreen = ({ userId, isManager = true }: ParkingSlotScreenProps)
                         <View style={styles.detailRow}>
                            <Ionicons
                               name={getStatusIcon(item.status)}
-                              size={16}
-                              color="#666"
+                              size={18}
+                              color="#5D5FEF"
                            />
                            <Text style={styles.detailText}>
                               {formatStatus(item.status)}
@@ -977,8 +1078,8 @@ const ParkingSlotScreen = ({ userId, isManager = true }: ParkingSlotScreenProps)
                            <View style={styles.detailRow}>
                               <Ionicons
                                  name="car-outline"
-                                 size={16}
-                                 color="#666"
+                                 size={18}
+                                 color="#5D5FEF"
                               />
                               <Text style={styles.detailText}>
                                  {item.vehicle_type}
@@ -989,8 +1090,8 @@ const ParkingSlotScreen = ({ userId, isManager = true }: ParkingSlotScreenProps)
                            <View style={styles.detailRow}>
                               <Ionicons
                                  name="cash-outline"
-                                 size={16}
-                                 color="#666"
+                                 size={18}
+                                 color="#5D5FEF"
                               />
                               <Text style={styles.detailText}>
                                  ${item.price_per_hour}/hour
@@ -1035,7 +1136,7 @@ const ParkingSlotScreen = ({ userId, isManager = true }: ParkingSlotScreenProps)
                         style={styles.closeButton}
                         onPress={() => setModalVisible(false)}
                      >
-                        <Ionicons name="close" size={24} color="#333" />
+                        <Ionicons name="close" size={24} color="#5D5FEF" />
                      </TouchableOpacity>
                   </View>
 
@@ -1107,6 +1208,7 @@ const ParkingSlotScreen = ({ userId, isManager = true }: ParkingSlotScreenProps)
                                     value={vehicleInfo}
                                     onChangeText={setVehicleInfo}
                                     placeholder="Enter vehicle model, license plate, etc."
+                                    placeholderTextColor="#A0A0A0"
                                  />
                               </View>
 
@@ -1166,7 +1268,7 @@ const ParkingSlotScreen = ({ userId, isManager = true }: ParkingSlotScreenProps)
                                        ? "information-circle"
                                        : "alert-circle"
                                  }
-                                 size={24}
+                                 size={28}
                                  color={getStatusColor(selectedSlot.status)}
                               />
                               <Text style={styles.unavailableText}>
@@ -1230,34 +1332,47 @@ const ScrollableChips = ({
 const styles = StyleSheet.create({
    container: {
       flex: 1,
-      backgroundColor: "#f5f5f5",
+      backgroundColor: "#f9fafc",
    },
    filterContainer: {
-      paddingVertical: 12,
+      paddingVertical: 16,
       paddingHorizontal: 16,
       backgroundColor: "white",
       borderBottomWidth: 1,
-      borderBottomColor: "#e0e0e0",
+      borderBottomColor: "#eaeaea",
+      shadowColor: "#000",
+      shadowOffset: { width: 0, height: 1 },
+      shadowOpacity: 0.08,
+      shadowRadius: 2,
+      elevation: 2,
    },
    chipsContainer: {
-      marginBottom: 8,
+      marginBottom: 4,
    },
    chip: {
-      paddingVertical: 8,
-      paddingHorizontal: 16,
-      borderRadius: 20,
-      marginRight: 8,
-      backgroundColor: "#e0e0e0",
+      paddingVertical: 10,
+      paddingHorizontal: 18,
+      borderRadius: 24,
+      marginRight: 10,
+      backgroundColor: "#f0f0f7",
+      borderWidth: 1,
+      borderColor: "#e8e8f5",
    },
    selectedChip: {
-      backgroundColor: "#3498db",
+      backgroundColor: "#5D5FEF",
+      borderColor: "#5D5FEF",
    },
    chipText: {
-      color: "#333",
+      color: "#555",
+      fontWeight: "500",
+      fontSize: 14,
    },
    selectedChipText: {
       color: "white",
-      fontWeight: "500",
+      fontWeight: "600",
+   },
+   listContainer: {
+      padding: 12,
    },
    centerContent: {
       flex: 1,
@@ -1266,49 +1381,54 @@ const styles = StyleSheet.create({
       padding: 20,
    },
    errorText: {
-      color: "red",
+      color: "#F44336",
       fontSize: 16,
       textAlign: "center",
-      marginTop: 8,
+      marginTop: 12,
+      fontWeight: "500",
    },
    loadingText: {
-      marginTop: 8,
+      marginTop: 12,
       color: "#666",
-      fontSize: 14,
+      fontSize: 15,
    },
    emptyText: {
-      marginTop: 8,
-      color: "#666",
-      fontSize: 16,
+      marginTop: 16,
+      color: "#555",
+      fontSize: 18,
       textAlign: "center",
+      fontWeight: "500",
    },
    viewAllText: {
-      marginTop: 12,
-      color: "#3498db",
-      fontSize: 14,
+      marginTop: 14,
+      color: "#3B82F6",
+      fontSize: 15,
+      fontWeight: "500",
       textDecorationLine: "underline",
    },
    slotCard: {
       backgroundColor: "white",
       margin: 8,
-      marginHorizontal: 16,
-      borderRadius: 8,
-      padding: 16,
-      shadowColor: "#000",
-      shadowOffset: { width: 0, height: 2 },
-      shadowOpacity: 0.1,
-      shadowRadius: 4,
-      elevation: 2,
+      borderRadius: 12,
+      padding: 18,
+      shadowColor: "#5D5FEF",
+      shadowOffset: { width: 0, height: 4 },
+      shadowOpacity: 0.08,
+      shadowRadius: 8,
+      elevation: 3,
+      borderWidth: 1,
+      borderColor: "#f0f0f7",
    },
    slotHeader: {
       flexDirection: "row",
       justifyContent: "space-between",
       alignItems: "center",
-      marginBottom: 12,
+      marginBottom: 14,
    },
    slotName: {
-      fontSize: 16,
-      fontWeight: "bold",
+      fontSize: 17,
+      fontWeight: "700",
+      color: "#333",
    },
    statusIndicator: {
       width: 12,
@@ -1316,26 +1436,33 @@ const styles = StyleSheet.create({
       borderRadius: 6,
    },
    slotDetails: {
-      marginBottom: 12,
+      marginBottom: 16,
    },
    detailRow: {
       flexDirection: "row",
       alignItems: "center",
-      marginBottom: 6,
+      marginBottom: 10,
    },
    detailText: {
-      marginLeft: 8,
-      color: "#555",
+      marginLeft: 10,
+      color: "#444",
+      fontSize: 15,
    },
    bookButton: {
-      backgroundColor: "#4CAF50",
-      paddingVertical: 10,
-      borderRadius: 4,
+      backgroundColor: "#5D5FEF",
+      paddingVertical: 12,
+      borderRadius: 8,
       alignItems: "center",
+      shadowColor: "#5D5FEF",
+      shadowOffset: { width: 0, height: 2 },
+      shadowOpacity: 0.25,
+      shadowRadius: 4,
+      elevation: 3,
    },
    bookButtonText: {
       color: "white",
-      fontWeight: "500",
+      fontWeight: "600",
+      fontSize: 15,
    },
    // Modal styles
    modalContainer: {
@@ -1345,62 +1472,77 @@ const styles = StyleSheet.create({
    },
    modalContent: {
       backgroundColor: "white",
-      borderTopLeftRadius: 20,
-      borderTopRightRadius: 20,
+      borderTopLeftRadius: 24,
+      borderTopRightRadius: 24,
       maxHeight: "80%",
+      shadowColor: "#000",
+      shadowOffset: { width: 0, height: -4 },
+      shadowOpacity: 0.15,
+      shadowRadius: 12,
+      elevation: 10,
    },
    modalHeader: {
       flexDirection: "row",
       justifyContent: "space-between",
       alignItems: "center",
-      padding: 16,
+      padding: 20,
       borderBottomWidth: 1,
-      borderBottomColor: "#e0e0e0",
+      borderBottomColor: "#eaeaea",
    },
    modalTitle: {
-      fontSize: 18,
-      fontWeight: "bold",
+      fontSize: 20,
+      fontWeight: "700",
+      color: "#333",
    },
    closeButton: {
-      padding: 4,
+      padding: 6,
+      borderRadius: 20,
+      backgroundColor: "#f5f5f7",
    },
    modalBody: {
-      padding: 16,
+      padding: 20,
    },
    detailSection: {
-      marginBottom: 20,
+      marginBottom: 24,
+      backgroundColor: "#f9fafc",
+      padding: 16,
+      borderRadius: 12,
+      borderWidth: 1,
+      borderColor: "#eaeaea",
    },
    bookingSection: {
       marginTop: 8,
-      paddingTop: 16,
+      paddingTop: 20,
       borderTopWidth: 1,
-      borderTopColor: "#e0e0e0",
+      borderTopColor: "#eaeaea",
    },
    releaseSection: {
       marginTop: 8,
-      paddingTop: 16,
+      paddingTop: 20,
       borderTopWidth: 1,
-      borderTopColor: "#e0e0e0",
+      borderTopColor: "#eaeaea",
    },
    sectionTitle: {
-      fontSize: 16,
-      fontWeight: "bold",
-      marginBottom: 12,
+      fontSize: 18,
+      fontWeight: "600",
+      marginBottom: 16,
       color: "#333",
    },
    detailItem: {
       flexDirection: "row",
-      paddingVertical: 6,
+      paddingVertical: 8,
       paddingHorizontal: 4,
    },
    detailLabel: {
       flex: 1,
-      fontWeight: "500",
-      color: "#666",
+      fontWeight: "600",
+      color: "#555",
+      fontSize: 15,
    },
    detailValue: {
       flex: 2,
       color: "#333",
+      fontSize: 15,
    },
    statusContainer: {
       flex: 2,
@@ -1408,68 +1550,87 @@ const styles = StyleSheet.create({
       alignItems: "center",
    },
    statusDot: {
-      width: 10,
-      height: 10,
-      borderRadius: 5,
-      marginRight: 8,
+      width: 12,
+      height: 12,
+      borderRadius: 6,
+      marginRight: 10,
    },
    inputGroup: {
-      marginBottom: 16,
+      marginBottom: 20,
    },
    inputLabel: {
-      fontSize: 14,
-      fontWeight: "500",
+      fontSize: 15,
+      fontWeight: "600",
       color: "#333",
-      marginBottom: 6,
+      marginBottom: 8,
    },
    input: {
-      backgroundColor: "#f5f5f5",
-      paddingVertical: 10,
-      paddingHorizontal: 12,
-      borderRadius: 4,
+      backgroundColor: "#f5f5f7",
+      paddingVertical: 12,
+      paddingHorizontal: 16,
+      borderRadius: 8,
       borderWidth: 1,
-      borderColor: "#e0e0e0",
+      borderColor: "#e0e0e8",
+      fontSize: 15,
+      color: "#333",
    },
    bookConfirmButton: {
-      backgroundColor: "#4CAF50",
-      paddingVertical: 12,
-      borderRadius: 8,
+      backgroundColor: "#5D5FEF",
+      paddingVertical: 14,
+      borderRadius: 10,
       alignItems: "center",
-      marginTop: 8,
+      marginTop: 10,
+      shadowColor: "#5D5FEF",
+      shadowOffset: { width: 0, height: 3 },
+      shadowOpacity: 0.25,
+      shadowRadius: 5,
+      elevation: 4,
    },
    bookConfirmButtonText: {
       color: "white",
-      fontWeight: "bold",
+      fontWeight: "700",
+      fontSize: 16,
    },
    releaseButton: {
-      backgroundColor: "#3498db",
-      paddingVertical: 12,
-      borderRadius: 8,
+      backgroundColor: "#3B82F6",
+      paddingVertical: 14,
+      borderRadius: 10,
       alignItems: "center",
-      marginTop: 8,
+      marginTop: 10,
+      shadowColor: "#3B82F6",
+      shadowOffset: { width: 0, height: 3 },
+      shadowOpacity: 0.25,
+      shadowRadius: 5,
+      elevation: 4,
    },
    releaseButtonText: {
       color: "white",
-      fontWeight: "bold",
+      fontWeight: "700",
+      fontSize: 16,
    },
    releaseNote: {
-      marginTop: 8,
-      fontSize: 12,
+      marginTop: 12,
+      fontSize: 13,
       color: "#666",
       fontStyle: "italic",
+      lineHeight: 18,
    },
    unavailableMessage: {
       flexDirection: "row",
       alignItems: "center",
-      backgroundColor: "#f8f8f8",
+      backgroundColor: "#f5f5f7",
       padding: 16,
-      borderRadius: 8,
+      borderRadius: 12,
       marginTop: 16,
+      borderWidth: 1,
+      borderColor: "#e5e5e5",
    },
    unavailableText: {
-      marginLeft: 8,
+      marginLeft: 12,
       color: "#555",
       flex: 1,
+      fontSize: 15,
+      lineHeight: 20,
    },
 });
 
