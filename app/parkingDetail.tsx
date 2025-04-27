@@ -36,7 +36,7 @@ const ParkingDetailsScreen = () => {
          require("../assets/images/Bishalbazar.png"),
       ],
       operatorName: "Parking Manager",
-      operatorImage: require("../assets/images/location.png"), // Use a default image
+      operatorImage: require("../assets/images/parkingmanager.png"), 
    };
 
    const bookSlot = () => {

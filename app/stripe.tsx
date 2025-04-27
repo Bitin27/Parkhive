@@ -1,3 +1,8 @@
+
+
+
+
+
 import React, { useState, useEffect } from "react";
 import {
    View,
@@ -36,10 +41,11 @@ const StripePayment = () => {
       totalAmount,
       userId,
       vehicleId,
+      userEmail
    } = params;
 
    // Use price or totalAmount for payment, with price as priority
-   const paymentAmount = price || totalAmount || "0";
+   const paymentAmount =  totalAmount || "0";
 
    // Initialize Stripe on component mount
    useEffect(() => {
@@ -295,7 +301,7 @@ const StripePayment = () => {
                body: {
                   amount: Math.round(parseFloat(paymentAmount) * 100), // Convert to cents
                   currency: "usd",
-                  description: `Parking at ${zoneName} - ${slotName} on ${date}`,
+                  description: `Park at ${zoneName}}by ${userEmail}`,
                },
             }
          );

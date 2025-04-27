@@ -14,6 +14,7 @@ import {
 import { useQuery } from "@tanstack/react-query";
 import { supabaseClient } from "../app/lib/supabase"; // Adjust path as needed
 import { useLocalSearchParams, useRouter } from "expo-router"; // Using Expo Router for navigation
+import { useUser } from "@clerk/clerk-expo";
 
 type ParkingSlot = {
    zone_id: string;
@@ -57,6 +58,40 @@ const ParkingZoneViewer: React.FC = () => {
       arrivalTime,
       exitTime,
    });
+
+   const { user } = useUser();
+   const email = user?.primaryEmailAddress?.emailAddress;
+
+   console.log("User email:", email);
+
+   // Add this query to fetch the user ID by email
+   const { data: userData, isLoading: userLoading } = useQuery({
+      queryKey: ["userId", email],
+      queryFn: async () => {
+         if (!email) return null;
+
+         console.log("Fetching user ID for email:", email);
+
+         const { data, error } = await supabaseClient
+            .from("users")
+            .select("id")
+            .eq("email", email)
+            .single();
+
+         if (error) {
+            console.error("Error fetching user ID:", error);
+            throw error;
+         }
+
+         console.log("User data from Supabase:", data);
+         return data;
+      },
+      enabled: !!email,
+   });
+
+   // You can now access the user ID with
+   const userId = userData?.id;
+   console.log("User ID:", userId);
 
    // Fetch parking zone details using React Query
    const { data, isLoading, error } = useQuery({
@@ -187,6 +222,8 @@ const ParkingZoneViewer: React.FC = () => {
             arrivalTime: arrivalTime || "",
             exitTime: exitTime || "",
             vehicleType,
+            userId: userId || "",
+            userEmail: email,
          },
       });
    };
@@ -448,6 +485,10 @@ const ParkingZoneViewer: React.FC = () => {
                         <Text style={styles.detailValue}>
                            Rs.{selectedSlotDetails.slot_price}/hour
                         </Text>
+                     </View>
+                     <View style={styles.detailRow}>
+                        <Text style={styles.detailLabel}>User's Email:</Text>
+                        <Text style={styles.detailValue}>{email}</Text>
                      </View>
                   </View>
 
