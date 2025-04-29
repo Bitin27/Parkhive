@@ -167,10 +167,11 @@ export function ParkingCard({
             price,
             time,
             spots,
-            address: address || "1012 Ocean avenue, New york, USA", // Default if not available
+            address, // Default if not available
             description: description || "No description available",
             latitude,
             longitude,
+            image
          },
       });
    };

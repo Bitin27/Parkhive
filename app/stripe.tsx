@@ -61,110 +61,7 @@ const StripePayment = () => {
       return timeStr;
    };
 
-   // Mutation to save booking data to Supabase and update slot status
-   // const createBookingMutation = useMutation({
-   //    mutationFn: async (paymentId) => {
-   //       try {
-   //          // Process start_time as just a time string
-   //          const formattedArrivalTime = formatTimeForPostgres(arrivalTime);
-
-   //          // Format the estimated_end_time as a full timestamp
-   //          // First validate the date format - assume YYYY-MM-DD format
-   //          if (!date.match(/^\d{4}-\d{2}-\d{2}$/)) {
-   //             throw new Error("Invalid date format. Expected YYYY-MM-DD");
-   //          }
-
-   //          // Create a proper timestamp for estimated_end_time
-   //          const endDateTimeStr = `${date}T${exitTime}`;
-   //          const endDateTime = new Date(endDateTimeStr);
-
-   //          if (isNaN(endDateTime.getTime())) {
-   //             throw new Error(
-   //                `Invalid date/time combination: ${endDateTimeStr}`
-   //             );
-   //          }
-
-   //          const estimatedEndTime = endDateTime.toISOString();
-
-   //          // Create booking data object
-   //          const bookingData = {
-   //             zone_id: zoneId,
-   //             // For time with time zone, just pass the time string directly
-   //             start_time: formattedArrivalTime,
-   //             user_id: parseInt(userId, 10),
-   //             vehicle_id: vehicleId,
-   //             slot_id: parseInt(slotId, 10),
-   //             estimated_end_time: estimatedEndTime,
-   //             actual_end_time: null,
-   //             total_amount: parseFloat(paymentAmount),
-   //             additional_charges: 0,
-   //             qr_code_data: {
-   //                zoneId,
-   //                slotId,
-   //                date,
-   //                arrivalTime,
-   //                exitTime,
-   //             },
-   //             payment_method: "stripe",
-   //             payment_id: paymentId,
-   //          };
-
-   //          console.log(
-   //             "Inserting booking with data:",
-   //             JSON.stringify(bookingData, null, 2)
-   //          );
-
-   //          // First, insert the booking
-   //          const { data: bookingResult, error: bookingError } =
-   //             await supabaseClient
-   //                .from("bookings")
-   //                .insert(bookingData)
-   //                .select();
-
-   //          if (bookingError) {
-   //             console.error("Booking error:", bookingError);
-   //             throw bookingError;
-   //          }
-
-   //          console.log("Booking created successfully:", bookingResult);
-
-   //          // Second, update the parking slot status to "occupied"
-   //          const { error: slotUpdateError } = await supabaseClient
-   //             .from("parking_slots")
-   //             .update({
-   //                status: "occupied",
-   //                updated_at: new Date().toISOString(),
-   //             })
-   //             .eq("id", slotId);
-
-   //          if (slotUpdateError) {
-   //             console.error("Slot update error:", slotUpdateError);
-   //             throw new Error(
-   //                `Slot status update failed: ${slotUpdateError.message}`
-   //             );
-   //          }
-
-   //          console.log("Parking slot updated to occupied");
-   //          return bookingResult;
-   //       } catch (error) {
-   //          console.error("Error in createBookingMutation:", error);
-   //          throw error;
-   //       }
-   //    },
-   //    onSuccess: () => {
-   //       setIsLoading(false);
-   //       Alert.alert("Success", "Your parking has been booked successfully!", [
-   //          {
-   //             text: "OK",
-   //             onPress: () => router.push("/bookings"),
-   //          },
-   //       ]);
-   //    },
-   //    onError: (error) => {
-   //       setIsLoading(false);
-   //       Alert.alert("Error", `Booking failed: ${error.message}`);
-   //    },
-   // });
+   
    // Mutation to save booking data to Supabase and update slot status
    const createBookingMutation = useMutation({
       mutationFn: async (paymentId) => {
@@ -302,6 +199,7 @@ const StripePayment = () => {
                   amount: Math.round(parseFloat(paymentAmount) * 100), // Convert to cents
                   currency: "usd",
                   description: `Park at ${zoneName}}by ${userEmail}`,
+                  email :  userEmail
                },
             }
          );
