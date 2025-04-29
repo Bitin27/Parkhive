@@ -1,41 +1,3 @@
-
-// import 'react-native-url-polyfill/auto'
-// import AsyncStorage from '@react-native-async-storage/async-storage'
-// import { createClient } from '@supabase/supabase-js'
-
-// export const supabaseClient = createClient(
-//   process.env.EXPO_PUBLIC_SUPABASE_URL || "",
-//   process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY || "",
-//   {
-//     auth: {
-//       storage: AsyncStorage,
-//       autoRefreshToken: true,
-//       persistSession: true,
-//       detectSessionInUrl: false,
-//     },
-//   })
-    
-// import "@react-native-async-storage/async-storage";
-// import AsyncStorage from "@react-native-async-storage/async-storage";
-// import { createClient } from "@supabase/supabase-js";
-
-// const supabaseUrl = process.env.EXPO_PUBLIC_SUPABASE_URL;
-// const supabaseAnonKey = process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY;
-
-// export const supabaseClient = createClient(
-//    supabaseUrl as any,
-//    supabaseAnonKey as any,
-//    {
-//       auth: {
-//          storage: AsyncStorage,
-//          autoRefreshToken: true,
-//          persistSession: true,
-//          detectSessionInUrl: false,
-//       },
-//    }
-// );
-
-
 import * as SecureStore from "expo-secure-store";
 import { createClient } from "@supabase/supabase-js";
 
@@ -62,7 +24,7 @@ export const supabaseClient = createClient(
 
 export const storeManagerData = async (data: any) => {
    try {
-      // Only store essential fields to reduce size
+      
       const essentialData = {
          managerid: data.managerid || data.ManagerID,
          firstname: data.firstname || data.FirstName,

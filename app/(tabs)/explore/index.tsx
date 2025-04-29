@@ -1,5 +1,3 @@
-
-
 import React, { useState, useRef } from "react";
 import {
   View,
@@ -78,7 +76,7 @@ const parkingLocations = [
 // Map center coordinates for Kathmandu
 const initialRegion = {
   latitude: 27.7010,
-  longitude: 85.3132, // Centered at Dharahara
+  longitude: 85.3132, 
   latitudeDelta: 0.0422,
   longitudeDelta: 0.0421,
 };

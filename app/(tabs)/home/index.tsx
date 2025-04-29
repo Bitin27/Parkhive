@@ -1,5 +1,3 @@
-
-
 import {
    View,
    Text,
@@ -14,7 +12,7 @@ import { ParkingCard } from "@/components/ParkingCard";
 import Header from "@/components/Header";
 import { Link } from "expo-router";
 import { useQuery } from "@tanstack/react-query";
-import { supabaseClient } from "../../lib/supabase"; // Adjust this import based on your setup
+import { supabaseClient } from "../../lib/supabase"; 
 
 export default function Home() {
    // React Query hook to fetch parking data
@@ -39,11 +37,11 @@ export default function Home() {
          return data.map((zone) => ({
             id: zone.id,
             name: zone.name || "Unnamed Zone",
-            rating: "4.0", // You may want to add this to your table or calculate it
-            price: "20.00", // You may want to add pricing to your table
-            time: "5", // Distance or time to the parking zone
-            spots: "28", // Available spots - you may want to add this to your table
-            // You'll need to handle images differently, perhaps with URLs in your database
+            rating: "4.0", 
+            price: "25.00", 
+            time: "5", 
+            spots: "28", 
+            
             image: zone.Image,
             address: zone.address,
             description: zone.description,

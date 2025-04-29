@@ -1,6 +1,3 @@
-
-
-// This is the secure store one
 import React, { useState } from "react";
 import {
    View,
@@ -24,8 +21,49 @@ const ManagerLoginScreen = () => {
    const [lastName, setLastName] = useState("");
    const [phone, setPhone] = useState("");
    const [address, setAddress] = useState("");
+   const [emailError, setEmailError] = useState("");
+   const [passwordError, setPasswordError] = useState("");
 
    const router = useRouter();
+
+   // Email validation function
+   const validateEmail = (email) => {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!email) {
+         setEmailError("Email is required");
+         return false;
+      } else if (!emailRegex.test(email)) {
+         setEmailError("Please enter a valid email address");
+         return false;
+      }
+      setEmailError("");
+      return true;
+   };
+
+   // Password validation function
+   const validatePassword = (password) => {
+      if (!password) {
+         setPasswordError("Password is required");
+         return false;
+      } else if (password.length < 8) {
+         setPasswordError("Password must be at least 8 characters long");
+         return false;
+      } else if (!/[A-Z]/.test(password)) {
+         setPasswordError("Password must contain at least one uppercase letter");
+         return false;
+      } else if (!/[a-z]/.test(password)) {
+         setPasswordError("Password must contain at least one lowercase letter");
+         return false;
+      } else if (!/[0-9]/.test(password)) {
+         setPasswordError("Password must contain at least one number");
+         return false;
+      } else if (!/[!@#$%^&*(),.?":{}|<>]/.test(password)) {
+         setPasswordError("Password must contain at least one special character");
+         return false;
+      }
+      setPasswordError("");
+      return true;
+   };
 
    // Sign in mutation
    const signInMutation = useMutation({
@@ -82,28 +120,59 @@ const ManagerLoginScreen = () => {
       setLastName("");
       setPhone("");
       setAddress("");
+      setEmailError("");
+      setPasswordError("");
    };
 
    const handleSubmit = () => {
+      // Basic required field validation
       if (!email || !password) {
-         return Alert.alert("Error", "Email and password are required");
+         Alert.alert("Error", "Email and password are required");
+         return;
       }
 
+      // For sign-up, validate all fields
       if (isSignUp) {
          if (!firstName || !lastName) {
-            return Alert.alert(
-               "Error",
-               "First name and last name are required"
-            );
+            Alert.alert("Error", "First name and last name are required");
+            return;
          }
+
+         // Validate email and password format for sign-up
+         const isEmailValid = validateEmail(email);
+         const isPasswordValid = validatePassword(password);
+
+         if (!isEmailValid || !isPasswordValid) {
+            return; // Stop submission if validation fails
+         }
+
          signUpMutation.mutate();
       } else {
+         // For login, we still validate email format but not password strength
+         if (!validateEmail(email)) {
+            return;
+         }
          signInMutation.mutate();
       }
    };
 
    const switchToUserLogin = () => {
       router.replace("/(auth)");
+   };
+
+   // Handle input changes with validation
+   const handleEmailChange = (text) => {
+      setEmail(text);
+      if (isSignUp) {
+         validateEmail(text);
+      }
+   };
+
+   const handlePasswordChange = (text) => {
+      setPassword(text);
+      if (isSignUp) {
+         validatePassword(text);
+      }
    };
 
    return (
@@ -135,23 +204,25 @@ const ManagerLoginScreen = () => {
             )}
 
             <TextInput
-               style={styles.input}
+               style={[styles.input, emailError ? styles.inputError : null]}
                placeholder="Email"
                value={email}
-               onChangeText={setEmail}
+               onChangeText={handleEmailChange}
                keyboardType="email-address"
                autoCapitalize="none"
                editable={!loading}
             />
+            {emailError ? <Text style={styles.errorText}>{emailError}</Text> : null}
 
             <TextInput
-               style={styles.input}
+               style={[styles.input, passwordError ? styles.inputError : null]}
                placeholder="Password"
                value={password}
-               onChangeText={setPassword}
+               onChangeText={handlePasswordChange}
                secureTextEntry
                editable={!loading}
             />
+            {passwordError ? <Text style={styles.errorText}>{passwordError}</Text> : null}
 
             {isSignUp && (
                <>
@@ -248,7 +319,17 @@ const styles = StyleSheet.create({
       backgroundColor: "#f9f9f9",
       borderRadius: 4,
       padding: 12,
-      marginBottom: 16,
+      marginBottom: 8,
+   },
+   inputError: {
+      borderWidth: 1,
+      borderColor: "#ff3b30",
+   },
+   errorText: {
+      color: "#ff3b30",
+      fontSize: 12,
+      marginBottom: 8,
+      marginLeft: 4,
    },
    button: {
       backgroundColor: "#3498db",

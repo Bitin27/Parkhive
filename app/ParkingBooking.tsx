@@ -1,5 +1,4 @@
-
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
    View,
    Text,
@@ -11,6 +10,7 @@ import {
    Platform,
    Modal,
    Button,
+   Alert,
 } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
 import { useLocalSearchParams, useRouter } from "expo-router";
@@ -41,6 +41,13 @@ const ParkingBooking: React.FC<BookingProps> = ({ onContinue = () => {} }) => {
    }>();
    console.log("Same zone id", zoneId, vehicleType);
 
+   // Initialize with current date/time
+   useEffect(() => {
+      const now = new Date();
+      setDate(now);
+      setArrivalTime(now);
+   }, []);
+
    // Format date for display
    const formatDate = (date: Date) => {
       return date.toLocaleDateString("en-US", {
@@ -59,10 +66,47 @@ const ParkingBooking: React.FC<BookingProps> = ({ onContinue = () => {} }) => {
       });
    };
 
+   // Function to validate if a date is in the past
+   const isDateInPast = (checkDate: Date): boolean => {
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      checkDate.setHours(0, 0, 0, 0);
+      return checkDate < today;
+   };
+
+   // Function to validate if time is in the past
+   const isTimeInPast = (selectedDate: Date, selectedTime: Date): boolean => {
+      const now = new Date();
+      
+      
+      if (selectedDate.getDate() === now.getDate() && 
+          selectedDate.getMonth() === now.getMonth() && 
+          selectedDate.getFullYear() === now.getFullYear()) {
+         return selectedTime < now;
+      }
+      
+      return false;
+   };
+
+   // Function to validate exit time is after arrival time
+   const isExitTimeBeforeArrival = (arrTime: Date, extTime: Date): boolean => {
+      return extTime <= arrTime;
+   };
+
    const handleContinue = () => {
       // Only proceed if arrival time is set
       if (!arrivalTime) {
          alert("Please select an arrival time");
+         return;
+      }
+
+      // Validate exit time if provided
+      if (exitTime && isExitTimeBeforeArrival(arrivalTime, exitTime)) {
+         Alert.alert(
+            "Invalid Time",
+            "Exit time must be after arrival time",
+            [{ text: "OK" }]
+         );
          return;
       }
 
@@ -85,21 +129,85 @@ const ParkingBooking: React.FC<BookingProps> = ({ onContinue = () => {} }) => {
    };
 
    const onDateChange = (event: any, selectedDate?: Date) => {
-      const currentDate = selectedDate || date;
-      setShowDatePicker(Platform.OS === "ios");
-      setDate(currentDate);
+      if (selectedDate) {
+         // Validate if date is in the past
+         if (isDateInPast(new Date(selectedDate))) {
+            Alert.alert(
+               "Invalid Date",
+               "Please select today or a future date",
+               [{ text: "OK" }]
+            );
+            return;
+         }
+         
+         setShowDatePicker(Platform.OS === "ios");
+         setDate(selectedDate);
+      } else {
+         setShowDatePicker(Platform.OS === "ios");
+      }
    };
 
    const onArrivalTimeChange = (event: any, selectedTime?: Date) => {
-      const currentTime = selectedTime || arrivalTime;
-      setShowArrivalPicker(Platform.OS === "ios");
-      setArrivalTime(currentTime);
+      if (selectedTime) {
+         // Create a new date object with the selected time but keeping the selected date
+         const newArrivalTime = new Date(date);
+         newArrivalTime.setHours(
+            selectedTime.getHours(),
+            selectedTime.getMinutes(),
+            0,
+            0
+         );
+         
+         // Validate if arrival time is in the past
+         if (isTimeInPast(date, newArrivalTime)) {
+            Alert.alert(
+               "Invalid Time",
+               "Please select a future time",
+               [{ text: "OK" }]
+            );
+            return;
+         }
+         
+         setShowArrivalPicker(Platform.OS === "ios");
+         setArrivalTime(newArrivalTime);
+         
+         // Also check and potentially reset exit time if it's now invalid
+         if (exitTime && isExitTimeBeforeArrival(newArrivalTime, exitTime)) {
+            const newExitTime = new Date(newArrivalTime);
+            newExitTime.setHours(newArrivalTime.getHours() + 1);
+            setExitTime(newExitTime);
+         }
+      } else {
+         setShowArrivalPicker(Platform.OS === "ios");
+      }
    };
 
    const onExitTimeChange = (event: any, selectedTime?: Date) => {
-      const currentTime = selectedTime || exitTime || new Date();
-      setShowExitPicker(Platform.OS === "ios");
-      setExitTime(currentTime);
+      if (selectedTime) {
+         
+         const newExitTime = new Date(date);
+         newExitTime.setHours(
+            selectedTime.getHours(),
+            selectedTime.getMinutes(),
+            0,
+            0
+         );
+         
+         
+         if (isExitTimeBeforeArrival(arrivalTime, newExitTime)) {
+            Alert.alert(
+               "Invalid Time",
+               "Exit time must be after arrival time",
+               [{ text: "OK" }]
+            );
+            return;
+         }
+         
+         setShowExitPicker(Platform.OS === "ios");
+         setExitTime(newExitTime);
+      } else {
+         setShowExitPicker(Platform.OS === "ios");
+      }
    };
 
    return (
@@ -184,6 +292,7 @@ const ParkingBooking: React.FC<BookingProps> = ({ onContinue = () => {} }) => {
                               mode="date"
                               display="spinner"
                               onChange={onDateChange}
+                              minimumDate={new Date()} // Set minimum date to today
                            />
                            <Button
                               title="Done"
@@ -199,6 +308,7 @@ const ParkingBooking: React.FC<BookingProps> = ({ onContinue = () => {} }) => {
                      mode="date"
                      display="default"
                      onChange={onDateChange}
+                     minimumDate={new Date()} // Set minimum date to today
                   />
                ))}
 

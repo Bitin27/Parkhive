@@ -184,7 +184,7 @@ export default function LoginScreen() {
       }
    };
 
-   // Navigation effect - only triggers once when userInfo becomes available
+   // Navigation effect 
    useEffect(() => {
       let isMounted = true;
 
@@ -267,7 +267,7 @@ export default function LoginScreen() {
          };
       }
 
-      // Ensure we have email - critical for database operations
+      
       if (!extractedInfo?.email) {
          console.warn("No email found in extracted user info");
          return null;
@@ -325,7 +325,7 @@ export default function LoginScreen() {
                console.log("Extracted user info:", extractedUserInfo);
                setUserInfo(extractedUserInfo);
             } else {
-               // Last resort - use email from the result to generate user info
+              
                if (result.signUp && result.signUp.emailAddress) {
                   const fallbackUserInfo = {
                      id: `user_${Date.now()}`,

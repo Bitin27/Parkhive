@@ -1,6 +1,3 @@
-
-
-// This is the solutions from the parking manager
 import React, { useState, useEffect } from "react";
 import {
    View,
@@ -22,7 +19,7 @@ import BookingsScreen from "../../components/parkingmanager/BookingsScreen";
 import ParkingSlotsScreen from "../../components/parkingmanager/ParkingSlotsScreen";
 import QRScannerScreen from "../../components/parkingmanager/QRScannerScreen";
 
-// Define manager data type
+
 type ParkingManager = {
    managerid: number;
    firstname: string;
